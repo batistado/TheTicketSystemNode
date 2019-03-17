@@ -2,6 +2,42 @@ const sampleData = require("../../models/sampleData");
 const validators = require("../../helpers/validators");
 
 module.exports = {
+  getChartData(req, res){
+    if (validators.isEmpty(sampleData)){
+        return res.status(404).send({
+            success: false,
+            message: 'Can not read data',
+        });
+    }
+
+    let data = {
+        'RequestorSeniority': {},
+        'FiledAgainst': {},
+        'TicketType': {},
+        'Severity': {},
+        'Priority': {},
+        'Satisfaction': {},
+    };
+
+    for (let ticket of sampleData){
+        for (let field in data){
+            if (!(ticket[field] in data[field])) {
+                data[field] = Object.assign(data[field], {
+                    [ticket[field]]: 1,
+                })
+            } else {
+                data[field][ticket[field]] = data[field][ticket[field]] + 1;
+            }
+        }
+    }
+
+    return res.status(200).send({
+        success: true,
+        data: data,
+    });
+
+  },
+
   getTicketDetails(req, res) {
     const ticket = sampleData.find(o => o.ticket === Number.parseInt(req.query.ticketId, 10));
 
