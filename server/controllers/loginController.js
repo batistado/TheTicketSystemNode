@@ -2,10 +2,10 @@ const loginData = require("../../models/loginData");
 
 module.exports = {
   login(req, res) {
-    const index = loginData.findIndex(o => o.id === req.username);
+    const index = loginData.findIndex(o => o.id === req.body.username);
 
-    if (index === -1 || loginData[index] !== req.password){
-        return res.status(404).send({
+    if (index === -1 || loginData[index].password !== req.body.password){
+        return res.status(401).send({
             success: false,
             message: 'Invalid username or password!',
         });

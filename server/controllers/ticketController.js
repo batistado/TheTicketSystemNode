@@ -2,7 +2,23 @@ const sampleData = require("../../models/sampleData");
 const validators = require("../../helpers/validators");
 
 module.exports = {
-  getData(req, res) {
+  getTicketDetails(req, res) {
+    const ticket = sampleData.find(o => o.ticket === Number.parseInt(req.query.ticketId, 10));
+
+    if (ticket === undefined) {
+        return res.status(404).send({
+            success: false,
+            message: `Can not find ticket with ID ${req.query.ticketId}`,
+        });
+    }
+
+    return res.status(200).send({
+        success: true,
+        data: ticket,
+    });
+  },
+
+  getAllTickets(req, res) {
     if (!validators.validateGetSchema(req.body)){
         return res.status(404).send({
             success: false,
