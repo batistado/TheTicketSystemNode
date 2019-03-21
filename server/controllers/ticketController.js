@@ -104,12 +104,10 @@ module.exports = {
             }
 
             let result = 0;
-            if (a[req.body.orderBy].toLowerCase() > b[req.body.orderBy].toLowerCase()){
-                result = 1;
-            } else if (a[req.body.orderBy].toLowerCase() < b[req.body.orderBy].toLowerCase()) {
-                result = -1;
+            if (req.body.orderBy === "Ticket Creation Date"){
+                result = validators.comparator(new Date(a[req.body.orderBy]), new Date(b[req.body.orderBy]));
             } else {
-                result = 0;
+                result = validators.comparator(a[req.body.orderBy].toLowerCase(), b[req.body.orderBy].toLowerCase());
             }
 
             return req.body.isAscending ? result : -1 * result;
